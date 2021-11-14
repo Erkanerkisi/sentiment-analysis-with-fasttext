@@ -1,16 +1,18 @@
 import './App.css';
 import {useEffect, useState} from "react";
 import {Row, Container, Col, InputGroup, FormControl} from 'react-bootstrap';
+import axios from "axios";
 
 
 function App() {
 
     const [text, setText] = useState("");
+    const [response, setResponse] = useState("");
 
     useEffect(() => {
         let timeOutId;
-        if (text != null || text !== "") {
-            timeOutId = setTimeout(() => console.log("trigger api call" + text), 3000);
+        if (text !== "") {
+            timeOutId = setTimeout(() => predict(text), 3000);
         }
         return () => {
             if(timeOutId != null) {
@@ -18,6 +20,19 @@ function App() {
             }
         };
     }, [text]);
+
+    const predict = (text) => {
+        axios.post('http://localhost:105/prediction', {
+            text: text,
+        })
+            .then(function (response) {
+                console.log(response)
+                setResponse(response.data)
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
 
     return (
         <div className="App">
@@ -32,7 +47,7 @@ function App() {
                             />
                         </InputGroup>
                     </Col>
-                    <Col>{text}</Col>
+                    <Col>{response}</Col>
                 </Row>
             </Container>
         </div>
