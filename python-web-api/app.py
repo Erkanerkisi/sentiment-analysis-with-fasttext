@@ -60,6 +60,39 @@ def insertToDbFromText():
     return "All data from the text file has been added to the DB!"
 
 
+@app.route('/write-to-txt/', methods=['GET'])
+def insertToDbFromText():
+    cluster = "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
+
+    with MongoClient(cluster) as client:
+        # client = MongoClient(cluster)
+
+        db = client.fasttext
+        todos = db.ecommercereviews
+        if os.path.exists("ecommercereview.txt"):
+            os.remove("ecommercereview.txt")
+        else:
+            print("The file does not exist")
+
+        ecommerceReviewsFile = open("ecommercereview.txt", "w")
+        result = todos.find({})
+        # ecommerceReviewsFile.writelines(' '.join(map(str, list(result))))
+
+        resultArray = list(result)
+        resultSize = len(resultArray)
+        count = 0
+        for res in resultArray:
+            count += 1
+            if count != resultSize:
+                string = res["label"] + res["review"] + "\n"
+            else:
+                string = res["label"] + res["review"]
+
+            ecommerceReviewsFile.writelines(string)
+        ecommerceReviewsFile.close()
+    return "All data from the DB has been added to a text file!"
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=105)
