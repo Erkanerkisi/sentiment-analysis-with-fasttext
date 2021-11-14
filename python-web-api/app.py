@@ -11,6 +11,19 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
+def insertToDB(label, review):
+    cluster = "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
+
+    with MongoClient(cluster) as client:
+        # client = MongoClient(cluster)
+
+        db = client.fasttext
+        todos = db.ecommercereviews
+        insert = {"label": label, "review": review}
+        print(insert)
+        result = todos.insert_one(insert)
+
+
 @app.route('/model', methods=['POST'])
 def create_model():
     # train_supervised uses the same arguments and defaults as the fastText cli
@@ -29,9 +42,11 @@ def create_model():
 def predict_text():
     data = request.get_json()
     # train_supervised uses the same arguments and defaults as the fastText cli
+    review = data["text"]
     model = load_model("comments.bin")
     # print(model.test())
-    result = model.predict(data["text"])
+    result = model.predict(review)
+    insertToDB(result[0][0], review)
     return result[0][0]
 
 @app.route('/insert-to-db/', methods=['GET'])
@@ -61,7 +76,7 @@ def insertToDbFromText():
 
 
 @app.route('/write-to-txt/', methods=['GET'])
-def insertToDbFromText():
+def writeToText():
     cluster = "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
 
     with MongoClient(cluster) as client:
@@ -91,6 +106,7 @@ def insertToDbFromText():
             ecommerceReviewsFile.writelines(string)
         ecommerceReviewsFile.close()
     return "All data from the DB has been added to a text file!"
+
 
 
 
