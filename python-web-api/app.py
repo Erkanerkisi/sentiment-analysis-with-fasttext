@@ -109,6 +109,14 @@ def writeToText():
 
 
 
+@app.route('/refresh-model/', methods=['GET'])
+def refreshModel():
+    writeToText()
+    create_model()
+    return "Model has been refreshed!"
+
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=105)
