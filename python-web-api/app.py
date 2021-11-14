@@ -19,7 +19,7 @@ def insertToDB(label, review):
 
         db = client.fasttext
         todos = db.ecommercereviews
-        insert = {"label": label, "review": review}
+        insert = {"label": label, "review": " " + review}
         print(insert)
         result = todos.insert_one(insert)
 
