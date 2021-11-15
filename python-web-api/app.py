@@ -10,10 +10,9 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
+cluster = "mongodb://mongo-server/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
 
 def insertToDB(label, review):
-    cluster = "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
-
     with MongoClient(cluster) as client:
         # client = MongoClient(cluster)
 
@@ -51,8 +50,6 @@ def predict_text():
 
 @app.route('/insert-to-db/', methods=['GET'])
 def insertToDbFromText():
-    cluster = "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
-
     with MongoClient(cluster) as client:
         # client = MongoClient(cluster)
 
@@ -77,7 +74,6 @@ def insertToDbFromText():
 
 @app.route('/write-to-txt/', methods=['GET'])
 def writeToText():
-    cluster = "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
 
     with MongoClient(cluster) as client:
         # client = MongoClient(cluster)

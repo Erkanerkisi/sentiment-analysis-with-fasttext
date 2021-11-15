@@ -74,7 +74,7 @@ function App() {
 
     return (
         <div>
-            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            <br/><br/><br/><br/><br/>
             <Container>
                 <Row className="align-items-center">
                     <Col>
