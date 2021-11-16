@@ -1,0 +1,21 @@
+version: '3'
+services:
+  python-web-api:
+    container_name: sen-ana-back
+    restart: always
+    build: C:\erkan\projects\sentiment-analysis-with-fasttext\python-web-api\.
+    ports:
+      - '105:105'
+    links:
+      - mongo
+  mongo:
+    container_name: mongo-server
+    image: mongo
+    ports:
+      - '27017:27017'
+  frontend:
+    container_name: sen-ana-fro
+    restart: always
+    build: C:\erkan\projects\sentiment-analysis-with-fasttext\sentiment-analysis-frontend-react\.
+    ports:
+      - '3000:3000'

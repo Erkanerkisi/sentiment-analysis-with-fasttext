@@ -10,7 +10,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
-cluster = "mongodb://mongo-server/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
+cluster = "mongodb://mongo/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
 
 def insertToDB(label, review):
     with MongoClient(cluster) as client:
