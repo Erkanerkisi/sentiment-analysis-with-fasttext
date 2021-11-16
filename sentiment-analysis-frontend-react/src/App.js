@@ -39,6 +39,21 @@ function App() {
             });
     }
 
+    const sendData = async (text, label) => {
+        axios.post('http://localhost:105/data', {
+            text: text,
+            label: label
+        })
+            .then(function (response) {
+                console.log(response)
+                setResponse(response.data)
+                setLoading(false)
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
     const convertResponseToIcon = (data) => {
         if (loading)
             return "Loading"
@@ -51,16 +66,6 @@ function App() {
         }
     }
 
-    const send = () => {
-        axios.get('http://localhost:105/send-data')
-            .then(function (response) {
-                console.log(response)
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    }
-
     const refreshModel = () => {
         axios.get('http://localhost:105/refresh-model')
             .then(function (response) {
@@ -69,6 +74,10 @@ function App() {
             .catch(function (error) {
                 console.log(error);
             });
+    }
+
+    const convertNumberToLabel = (val) => {
+        return "__label__" + val
     }
 
 
@@ -103,7 +112,7 @@ function App() {
                         <Form.Check checked={actualResult === 2} type="checkbox" label="Olumsuz"
                                     onChange={() => setActualResult(2)}/>
                     </Form.Group>
-                    <Button disabled={actualResult === -1} onClick={() => send(actualResult)}>Data Setine
+                    <Button disabled={actualResult === -1} onClick={() => sendData(text, convertNumberToLabel(actualResult))}>Data Setine
                         Gönder</Button>
                 </Row>
                 <br/>

@@ -12,6 +12,15 @@ app = Flask(__name__)
 CORS(app)
 cluster = "mongodb://mongo/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
 
+@app.route('/data', methods=['POST'])
+def predict_text():
+    data = request.get_json()
+    reviewtext = data["text"]
+    reviewlabel = data["label"]
+    insertToDB(reviewlabel, reviewtext)
+    return "saved"
+
+
 def insertToDB(label, review):
     with MongoClient(cluster) as client:
         # client = MongoClient(cluster)
@@ -45,7 +54,7 @@ def predict_text():
     model = load_model("comments.bin")
     # print(model.test())
     result = model.predict(review)
-    insertToDB(result[0][0], review)
+    # insertToDB(result[0][0], review)
     return result[0][0]
 
 @app.route('/insert-to-db/', methods=['GET'])

@@ -3,7 +3,7 @@ services:
   python-web-api:
     container_name: sen-ana-back
     restart: always
-    build: C:\erkan\projects\sentiment-analysis-with-fasttext\python-web-api\.
+    build: python-web-api/.
     ports:
       - '105:105'
     links:
@@ -16,6 +16,6 @@ services:
   frontend:
     container_name: sen-ana-fro
     restart: always
-    build: C:\erkan\projects\sentiment-analysis-with-fasttext\sentiment-analysis-frontend-react\.
+    build: sentiment-analysis-frontend-react/.
     ports:
       - '3000:3000'
