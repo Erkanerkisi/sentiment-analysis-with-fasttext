@@ -27,7 +27,7 @@ def insertToDB(label, review):
 
         db = client.fasttext
         todos = db.ecommercereviews
-        insert = {"label": label, "review": " " + review}
+        insert = {"label": label, "review": review}
         print(insert)
         result = todos.insert_one(insert)
 
@@ -78,7 +78,7 @@ def insertToDbFromText():
         for line in ecommerceReviewsFile:
             lineStrip = line.strip()
             label = lineStrip[0:10]
-            review = lineStrip[10:]
+            review = lineStrip[11:]
 
             insert = {"label": label, "review": review}
             print(insert)
