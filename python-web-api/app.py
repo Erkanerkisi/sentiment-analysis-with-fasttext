@@ -13,7 +13,7 @@ CORS(app)
 cluster = "mongodb://mongo/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
 
 @app.route('/data', methods=['POST'])
-def predict_text():
+def sendData():
     data = request.get_json()
     reviewtext = data["text"]
     reviewlabel = data["label"]
@@ -51,7 +51,13 @@ def predict_text():
     data = request.get_json()
     # train_supervised uses the same arguments and defaults as the fastText cli
     review = data["text"]
+
+    if not os.path.exists("comments.bin"):
+        create_model()
+        print("predict comments.bin not exist")
+
     model = load_model("comments.bin")
+
     # print(model.test())
     result = model.predict(review)
     # insertToDB(result[0][0], review)
@@ -78,6 +84,7 @@ def insertToDbFromText():
             print(insert)
             result = todos.insert_one(insert)
         ecommerceReviewsFile.close()
+        refreshModel()
     return "All data from the text file has been added to the DB!"
 
 
@@ -114,7 +121,7 @@ def writeToText():
 
 
 
-@app.route('/refresh-model/', methods=['GET'])
+@app.route('/refresh-model', methods=['GET'])
 def refreshModel():
     writeToText()
     create_model()
