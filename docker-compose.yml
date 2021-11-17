@@ -8,6 +8,9 @@ services:
       - '105:105'
     links:
       - mongo
+    # depends_on:
+    #  - mongo
+    # command: initialScript.py
   mongo:
     container_name: mongo-server
     image: mongo

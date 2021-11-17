@@ -5,9 +5,6 @@ from pymongo import MongoClient
 import os
 from flask_cors import CORS
 
-
-
-
 app = Flask(__name__)
 CORS(app)
 cluster = "mongodb://mongo/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
@@ -45,7 +42,6 @@ def create_model():
         return "ERROR!!! First you need to call insert-to-db!"
 
 
-
 @app.route('/prediction', methods=['POST'])
 def predict_text():
     data = request.get_json()
@@ -63,16 +59,16 @@ def predict_text():
     # insertToDB(result[0][0], review)
     return result[0][0]
 
-@app.route('/insert-to-db/', methods=['GET'])
+
+@app.route('/insert-to-db', methods=['GET'])
 def insertToDbFromText():
     with MongoClient(cluster) as client:
         # client = MongoClient(cluster)
-
         db = client.fasttext
         todos = db.ecommercereviews
         result1 = todos.delete_many({})
 
-        ecommerceReviewsFile = open("eticaretyorumlari.txt", "r")
+        ecommerceReviewsFile = open("eticaretyorumlari.txt", encoding="utf8")
         # contents = ecommerceReviewsFile.readlines()
 
         for line in ecommerceReviewsFile:
@@ -88,9 +84,8 @@ def insertToDbFromText():
     return "All data from the text file has been added to the DB!"
 
 
-@app.route('/write-to-txt/', methods=['GET'])
+@app.route('/write-to-txt', methods=['GET'])
 def writeToText():
-
     with MongoClient(cluster) as client:
         # client = MongoClient(cluster)
 
@@ -120,14 +115,11 @@ def writeToText():
     return "All data from the DB has been added to a text file!"
 
 
-
 @app.route('/refresh-model', methods=['GET'])
 def refreshModel():
     writeToText()
     create_model()
     return "Model has been refreshed!"
-
-
 
 
 if __name__ == '__main__':
