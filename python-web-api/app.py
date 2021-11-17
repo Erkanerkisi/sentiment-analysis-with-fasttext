@@ -80,15 +80,15 @@ def insertToDbFromText():
             print(insert)
             result = todos.insert_one(insert)
         ecommerceReviewsFile.close()
-        refreshModel()
-    return "All data from the text file has been added to the DB!"
+        response = refreshModel()
+    return response
 
 
 @app.route('/write-to-txt', methods=['GET'])
 def writeToText():
     with MongoClient(cluster) as client:
         # client = MongoClient(cluster)
-
+        print("******Write To text started *******")
         db = client.fasttext
         todos = db.ecommercereviews
         if os.path.exists("ecommercereview.txt"):
@@ -106,20 +106,21 @@ def writeToText():
         for res in resultArray:
             count += 1
             if count != resultSize:
-                string = res["label"] + res["review"] + "\n"
+                string = res["label"] + " " + res["review"] + "\n"
             else:
-                string = res["label"] + res["review"]
+                string = res["label"] + " " + res["review"]
 
             ecommerceReviewsFile.writelines(string)
         ecommerceReviewsFile.close()
+        print("******Write To text ended *******")
     return "All data from the DB has been added to a text file!"
 
 
 @app.route('/refresh-model', methods=['GET'])
 def refreshModel():
-    writeToText()
-    create_model()
-    return "Model has been refreshed!"
+    res = writeToText()
+    response_model = create_model()
+    return res + " - " + response_model
 
 
 if __name__ == '__main__':
