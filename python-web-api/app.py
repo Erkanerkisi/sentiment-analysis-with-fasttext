@@ -123,5 +123,14 @@ def refreshModel():
     return res + " - " + response_model
 
 
+@app.route('/test', methods=['GET'])
+def test():
+    model = load_model("comments.bin")
+    result = model.test("test.txt")
+    print(result)
+    str1 = ''.join(" " + str(e) for e in result)
+    return str1
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=105)
