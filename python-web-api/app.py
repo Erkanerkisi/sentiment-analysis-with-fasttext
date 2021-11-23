@@ -23,10 +23,10 @@ def insertToDB(label, review):
         # client = MongoClient(cluster)
 
         db = client.fasttext
-        todos = db.ecommercereviews
+        ec = db.ecommercereviews
         insert = {"label": label, "review": review}
         print(insert)
-        result = todos.insert_one(insert)
+        result = ec.insert_one(insert)
 
 
 @app.route('/model', methods=['POST'])
@@ -65,8 +65,8 @@ def insertToDbFromText():
     with MongoClient(cluster) as client:
         # client = MongoClient(cluster)
         db = client.fasttext
-        todos = db.ecommercereviews
-        result1 = todos.delete_many({})
+        ec = db.ecommercereviews
+        result1 = ec.delete_many({})
 
         ecommerceReviewsFile = open("eticaretyorumlari.txt", encoding="utf8")
         # contents = ecommerceReviewsFile.readlines()
@@ -78,7 +78,7 @@ def insertToDbFromText():
 
             insert = {"label": label, "review": review}
             print(insert)
-            result = todos.insert_one(insert)
+            result = ec.insert_one(insert)
         ecommerceReviewsFile.close()
         response = refreshModel()
     return response
@@ -90,14 +90,14 @@ def writeToText():
         # client = MongoClient(cluster)
         print("******Write To text started *******")
         db = client.fasttext
-        todos = db.ecommercereviews
+        ec = db.ecommercereviews
         if os.path.exists("ecommercereview.txt"):
             os.remove("ecommercereview.txt")
         else:
             print("The file does not exist")
 
         ecommerceReviewsFile = open("ecommercereview.txt", "w")
-        result = todos.find({})
+        result = ec.find({})
         # ecommerceReviewsFile.writelines(' '.join(map(str, list(result))))
 
         resultArray = list(result)
